@@ -1,15 +1,11 @@
 <template>
-  <div id="nav-bar">
+  <div id="nav-bar" data-testid="nav-bar">
     <i class="mdi mdi-door-open" />
   </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {}
-  }
-}
+export default {}
 </script>
 
 <style lang="scss" scoped>

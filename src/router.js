@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Properties from '@/views/Properties.vue'
-import CharEncoder from '../services/CharEncoder'
+import CharEncoder from './services/CharEncoder'
 
 Vue.use(VueRouter)
 

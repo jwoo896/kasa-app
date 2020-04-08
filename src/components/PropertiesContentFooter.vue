@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import { EventBus } from '@/services/EventBus'
 import { createPopper } from '@popperjs/core'
 
 export default {
@@ -85,13 +84,13 @@ export default {
     applyChanges() {
       this.isSaving = true
       setTimeout(() => {
-        EventBus.$emit('toggleEdit', false)
+        this.$store.dispatch('toggleEdit')
         this.isSaving = false
       }, 2000)
     },
 
     cancel() {
-      EventBus.$emit('toggleEdit', false)
+      this.$store.dispatch('toggleEdit')
     }
   }
 }
@@ -101,7 +100,7 @@ export default {
 @import '../scss/_variables.scss';
 
 .footer-wrapper {
-  position: sticky;
+  position: fixed;
   bottom: 0px;
 }
 

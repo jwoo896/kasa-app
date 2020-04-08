@@ -41,6 +41,9 @@ body {
 
 .content-view {
   flex: 8;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 120px;
 }
 
 .button {

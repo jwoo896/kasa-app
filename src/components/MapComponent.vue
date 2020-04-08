@@ -11,12 +11,14 @@
         :label="inputMetaData.latitudeInput.label"
         :valProp="markerPosLat.toString()"
         :onBlurProp="inputMetaData.latitudeInput.onBlur"
+        :isEditing="isEditing"
       />
       <PureTextInput
         :id="inputMetaData.longitudeInput.id"
         :label="inputMetaData.longitudeInput.label"
         :valProp="markerPosLng.toString()"
         :onBlurProp="inputMetaData.longitudeInput.onBlur"
+        :isEditing="isEditing"
       />
     </div>
   </div>
@@ -24,6 +26,7 @@
 
 <script>
 import { EventBus } from '@/services/EventBus'
+import { mapState } from 'vuex'
 import PureTextInput from '@/components/PureTextInput.vue'
 import Velocity from 'velocity-animate'
 import 'velocity-animate/velocity.ui'
@@ -41,7 +44,7 @@ export default {
           label: 'Latitude',
           onBlur: function(event) {
             let val = event.target.value
-            EventBus.$emit('lat_updated', val)
+            this.$store.dispatch('setMapMarkerLat', parseFloat(val))
             return val
           }
         },
@@ -50,14 +53,12 @@ export default {
           label: 'Longitude',
           onBlur: function(event) {
             let val = event.target.value
-            EventBus.$emit('lng_updated', val)
+            this.$store.dispatch('setMapMarkerLng', parseFloat(val))
+
             return val
           }
         }
       },
-      isEditing: false,
-      markerPosLat: 37.750212,
-      markerPosLng: -122.422088,
       $_marker: null,
       $_googleMapsApi: null,
       $_geocoder: null,
@@ -66,34 +67,55 @@ export default {
   },
 
   computed: {
-    markerPos: {
-      get() {
-        return { lat: this.markerPosLat, lng: this.markerPosLng }
+    ...mapState({
+      isEditing: state => {
+        let isEditing = state.nameAddressComponentData.isEditing
+        if (isEditing) {
+          Velocity(
+            document.getElementById('reset-control'),
+            'transition.fadeIn',
+            {
+              drag: 400,
+              duration: 1000
+            }
+          )
+        } else {
+          Velocity(
+            document.getElementById('reset-control'),
+            'transition.fadeOut',
+            {
+              drag: 400,
+              duration: 1000
+            }
+          )
+        }
+        return isEditing
       },
 
-      set(newVal) {
-        if (newVal.type === 'lat') {
-          this.markerPosLat = newVal.val
-        } else {
-          this.markerPosLng = newVal.val
-        }
+      markerPos(state) {
+        let pos = state.nameAddressComponentData.gMapsData.markerPos
+        return pos
+      },
 
-        this.$_marker.setPosition({
-          lat: this.markerPosLat,
-          lng: this.markerPosLng
-        })
+      markerPosLat(state) {
+        let lat = state.nameAddressComponentData.gMapsData.markerPos.lat
+        this.moveMarker()
 
-        this.$_map.setZoom(16)
-        this.$_map.setCenter({
-          lat: this.markerPosLat,
-          lng: this.markerPosLng
-        })
+        return lat
+      },
+
+      markerPosLng(state) {
+        let lng = state.nameAddressComponentData.gMapsData.markerPos.lng
+        this.moveMarker()
+
+        return lng
       }
-    }
+    })
   },
 
   methods: {
-    createResetControlButton(defaultPos) {
+    createResetControlButton() {
+      const defaultMarkerPos = { lat: 37.750212, lng: -122.422088 }
       let controlDiv = document.createElement('div')
       controlDiv.id = 'reset-control'
       controlDiv.style.display = 'none'
@@ -119,19 +141,29 @@ export default {
       controlUI.appendChild(controlText)
 
       controlUI.addEventListener('click', () => {
-        this.markerPos = { type: 'lat', val: defaultPos.lat }
-        this.markerPos = { type: 'lng', val: defaultPos.lng }
+        this.$store.dispatch('setMapMarkerLat', defaultMarkerPos.lat)
+        this.$store.dispatch('setMapMarkerLng', defaultMarkerPos.lng)
       })
 
       this.$_map.controls[
         this.$_googleMapsApi.maps.ControlPosition.TOP_RIGHT
       ].push(controlDiv)
+    },
+
+    moveMarker() {
+      if (this.$_marker && this.$_map) {
+        this.$_marker.setPosition({
+          lat: this.markerPos.lat,
+          lng: this.markerPos.lng
+        })
+        this.$_map.setZoom(16)
+        this.$_map.setCenter(this.markerPos)
+      }
     }
   },
 
   created() {
     EventBus.$on('googleMaps', google => {
-      const defaultPos = { lat: 37.750212, lng: -122.422088 }
       // initialize maps api to make markers on the fly and have access to geocoder and map
       this.$_googleMapsApi = google
       this.$_geocoder = new google.maps.Geocoder()
@@ -151,22 +183,13 @@ export default {
       )
 
       this.$_marker = new this.$_googleMapsApi.maps.Marker({
-        position: defaultPos,
+        position: this.markerPos,
         map: this.$_map,
         draggable: true,
         animation: this.$_googleMapsApi.maps.Animation.DROP
       })
 
-      this.createResetControlButton(defaultPos)
-    })
-
-    EventBus.$on('place_selected', place => {
-      let location = {
-        lat: place.geometry.location.lat(),
-        lng: place.geometry.location.lng()
-      }
-      this.$_marker.setPosition(location)
-      this.$_map.setCenter(location)
+      this.createResetControlButton()
     })
 
     EventBus.$on('lat_updated', lat => {
@@ -174,28 +197,6 @@ export default {
     })
     EventBus.$on('lng_updated', lng => {
       this.markerPos = { type: 'lng', val: parseFloat(lng) }
-    })
-
-    EventBus.$on('toggleEdit', isEditing => {
-      if (isEditing) {
-        Velocity(
-          document.getElementById('reset-control'),
-          'transition.fadeIn',
-          {
-            drag: 400,
-            duration: 1000
-          }
-        )
-      } else {
-        Velocity(
-          document.getElementById('reset-control'),
-          'transition.fadeOut',
-          {
-            drag: 400,
-            duration: 1000
-          }
-        )
-      }
     })
   }
 }

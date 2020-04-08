@@ -13,14 +13,13 @@
       :pattern="pattern"
       @blur="onBlur"
       :disabled="!isEditing"
-      :value="valProp || inputVal"
+      v-model="inputVal"
+      :placeholder="placeholder"
     />
   </div>
 </template>
 
 <script>
-import { EventBus } from '@/services/EventBus'
-
 export default {
   props: {
     size: Number,
@@ -34,14 +33,17 @@ export default {
     label: String,
     placeholder: String,
     valProp: String,
+    isEditing: Boolean,
     onFocusProp: Function,
     onBlurProp: Function
   },
 
-  data() {
-    return {
-      isEditing: false,
-      inputVal: ''
+  computed: {
+    inputVal: {
+      get() {
+        return this.valProp
+      },
+      set() {}
     }
   },
 
@@ -53,10 +55,6 @@ export default {
         return
       }
     }
-  },
-
-  created() {
-    EventBus.$on('toggleEdit', isEditing => (this.isEditing = isEditing))
   }
 }
 </script>

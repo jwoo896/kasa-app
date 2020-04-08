@@ -1,19 +1,19 @@
 <template>
-  <div id="header-container">
+  <div id="header-container" data-testid="pure-header">
     <div id="path-container">
       <span v-for="(pathName, index) of path" :key="pathName">
         <span
-          class="pathName"
+          class="path-name"
           :class="{ visited: index !== path.length - 1 }"
           >{{ pathName }}</span
         >
-        <span class="pathSlash" v-if="index !== path.length - 1">/</span>
+        <span class="path-slash" v-if="index !== path.length - 1">/</span>
       </span>
     </div>
     <div id="title-container">
       <div id="status">Draft</div>
       <div id="title">{{ path[path.length - 1] }}</div>
-      <button v-show="showButton" @click="edit" id="edit-button" class="button">
+      <button v-show="!isEditing" @click="edit" id="edit-button" class="button">
         Edit
       </button>
     </div>
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { EventBus } from '../services/EventBus'
+import { mapState } from 'vuex'
 import upperFirst from 'lodash/upperFirst'
 import Velocity from 'velocity-animate'
 import 'velocity-animate/velocity.ui'
@@ -31,54 +31,45 @@ export default {
   data() {
     return {
       headerData: this.data,
-      isEditing: false,
+      // isEditing: false,
       showButton: true
     }
   },
 
   methods: {
     edit() {
-      EventBus.$emit('toggleEdit', true)
+      this.$store.dispatch('toggleEdit')
     }
   },
 
-  watch: {
-    isEditing(val) {
-      if (val) {
-        Velocity(
-          document.getElementById('edit-button'),
-          'transition.slideRightOut',
-          {
-            drag: 400,
-            duration: 1000
-          }
-        ).then(() => (this.showButton = false))
-      } else {
-        Velocity(
-          document.getElementById('edit-button'),
-          'transition.slideRightIn',
-          {
-            drag: 400,
-            duration: 1000
-          }
-        ).then(() => (this.showButton = true))
+  computed: {
+    ...mapState({
+      isEditing: state => {
+        if (state.nameAddressComponentData.isEditing) {
+          Velocity(
+            document.getElementById('edit-button'),
+            'transition.slideRightOut',
+            {
+              drag: 400,
+              duration: 1000
+            }
+          )
+        } else {
+          Velocity(
+            document.getElementById('edit-button'),
+            'transition.slideRightIn',
+            {
+              drag: 400,
+              duration: 1000
+            }
+          )
+        }
       }
-    }
+    })
   },
 
   created() {
-    EventBus.$on('toggleEdit', isEditing => {
-      this.isEditing = isEditing
-      Velocity(
-        document.getElementById('edit-buttom'),
-        'transition.slideLeftIn',
-        {
-          drag: 400,
-          duration: 1000
-        }
-      )
-    })
-
+    Velocity.mock = 0
     let pathArr = this.data.path.split('/')
 
     this.path = pathArr
@@ -103,7 +94,7 @@ export default {
   margin: 0.5em 0 0 0.5em;
 }
 
-.pathName {
+.path-name {
   margin: 0 0.5em 0 0.5em;
 
   &:hover {
@@ -111,7 +102,7 @@ export default {
   }
 }
 
-.pathSlash {
+.path-slash {
   text-decoration: none;
   color: $light-gray;
   margin: 0 0.5em 0 0.5em;

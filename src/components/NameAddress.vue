@@ -9,12 +9,14 @@
       :required="nameSection.internalTitleInput.required"
       :onBlurProp="nameSection.internalTitleInput.onBlur"
       :styleProp="nameSection.internalTitleInput.styleObj"
+      :isEditing="isEditing"
     />
     <PureTextInput
       :id="nameSection.nameInput.id"
       :label="nameSection.nameInput.label"
       :size="nameSection.nameInput.size"
       :required="nameSection.nameInput.required"
+      :isEditing="isEditing"
     />
     <PureTitle :titleProp="locationSection.title" />
     <LocationForm />
@@ -26,6 +28,7 @@
 <script>
 import gmapsInit from '../utils/gmaps'
 import { EventBus } from '@/services/EventBus'
+import { mapState } from 'vuex'
 import PureTitle from '@/components/PureTitle.vue'
 import PureTextInput from '@/components/PureTextInput.vue'
 import LocationForm from '@/components/LocationForm.vue'
@@ -80,6 +83,13 @@ export default {
       }
     }
   },
+
+  computed: {
+    ...mapState({
+      isEditing: state => state.nameAddressComponentData.isEditing
+    })
+  },
+
   async mounted() {
     try {
       const google = await gmapsInit()
@@ -94,6 +104,7 @@ export default {
 
 <style lang="scss" scoped>
 #name-address-container {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

@@ -32,18 +32,17 @@
 </template>
 
 <script>
-import { EventBus } from '@/services/EventBus'
 import Velocity from 'velocity-animate'
 import 'velocity-animate/velocity.ui'
 
 export default {
   props: {
-    items: Array
+    items: Array,
+    isEditing: Boolean
   },
   data() {
     return {
-      showSectionTitles: false,
-      isEditing: false
+      showSectionTitles: false
     }
   },
   methods: {
@@ -98,10 +97,6 @@ export default {
         })
       }
     }
-  },
-
-  created() {
-    EventBus.$on('toggleEdit', isEditing => (this.isEditing = isEditing))
   }
 }
 </script>

@@ -1,15 +1,15 @@
 <template>
   <div id="properties-container">
-    <PureMenu :items="items" />
+    <PureMenu :items="items" :isEditing="isEditing" />
     <div class="content-view">
       <router-view />
-      <PropertiesContentFooter v-show="showFooter" />
+      <PropertiesContentFooter v-show="isEditing" />
     </div>
   </div>
 </template>
 
 <script>
-import { EventBus } from '../services/EventBus'
+import { mapState } from 'vuex'
 import PureMenu from '@/components/PureMenu.vue'
 import PropertiesContentFooter from '@/components/PropertiesContentFooter.vue'
 import Velocity from 'velocity-animate'
@@ -56,30 +56,36 @@ export default {
           showDataOnEdit: false
         }
       ],
-      isEditing: false,
       showFooter: false
     }
   },
 
-  watch: {
-    isEditing(val) {
-      let el = document.querySelector('.footer-wrapper')
+  computed: {
+    ...mapState({
+      isEditing: state => {
+        let footerEl = document.querySelector('.footer-wrapper')
+        let contentViewEl = document.querySelector('.content-view')
 
-      if (val) {
-        Velocity(el, 'transition.slideUpIn', {
-          drag: 400,
-          duration: 1000
-        }).then(() => (this.showFooter = true))
-      } else {
-        Velocity(el, 'transition.slideDownOut', {
-          drag: 400,
-          duration: 1000
-        }).then(() => (this.showFooter = false))
+        if (
+          state.nameAddressComponentData.isEditing &&
+          footerEl &&
+          contentViewEl
+        ) {
+          footerEl.style.width = `${contentViewEl.offsetWidth}px`
+
+          Velocity(footerEl, 'transition.slideUpIn', {
+            drag: 400,
+            duration: 1000
+          })
+        } else {
+          Velocity(footerEl, 'transition.slideDownOut', {
+            drag: 400,
+            duration: 1000
+          })
+        }
+        return state.nameAddressComponentData.isEditing
       }
-    }
-  },
-  created() {
-    EventBus.$on('toggleEdit', isEditing => (this.isEditing = isEditing))
+    })
   }
 }
 </script>
