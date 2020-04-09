@@ -19,6 +19,14 @@ export const mutations = {
 
   SET_MAP_MARKER_LNG(state, lng) {
     state.nameAddressComponentData.gMapsData.markerPos.lng = lng
+  },
+
+  SET_INTERNAL_TITLE(state, internalTitle) {
+    state.nameAddressComponentData.internalTitle = internalTitle
+  },
+
+  SET_NAME(state, name) {
+    state.nameAddressComponentData.name = name
   }
 }
 
@@ -41,6 +49,14 @@ export const actions = {
 
   setMapMarkerLng({ commit }, lng) {
     commit('SET_MAP_MARKER_LNG', lng)
+  },
+
+  setInternalTitle({ commit }, internalTitle) {
+    commit('SET_INTERNAL_TITLE', internalTitle)
+  },
+
+  setName({ commit }, name) {
+    commit('SET_NAME', name)
   }
 }
 
@@ -48,6 +64,8 @@ export default new Vuex.Store({
   state: {
     nameAddressComponentData: {
       isEditing: false,
+      internalTitle: '',
+      name: '',
       gMapsData: {
         autocompletePlace: null,
         markerPos: { lat: 37.750212, lng: -122.422088 }

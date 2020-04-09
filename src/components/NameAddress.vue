@@ -7,6 +7,7 @@
       :maxLength="nameSection.internalTitleInput.maxLength"
       :pattern="nameSection.internalTitleInput.pattern"
       :required="nameSection.internalTitleInput.required"
+      :valProp="internalTitle"
       :onBlurProp="nameSection.internalTitleInput.onBlur"
       :styleProp="nameSection.internalTitleInput.styleObj"
       :isEditing="isEditing"
@@ -16,6 +17,8 @@
       :label="nameSection.nameInput.label"
       :size="nameSection.nameInput.size"
       :required="nameSection.nameInput.required"
+      :valProp="name"
+      :onBlurProp="nameSection.nameInput.onBlur"
       :isEditing="isEditing"
     />
     <PureTitle :titleProp="locationSection.title" />
@@ -55,10 +58,12 @@ export default {
           styleObj: {
             alignSelf: 'unset'
           },
-          onBlur: event => {
+          onBlur: function(event) {
             let val = event.target.value
             if (val.match(this.pattern)) {
-              return val.toUpperCase()
+              let valUpper = val.toUpperCase()
+              this.$store.dispatch('setInternalTitle', valUpper)
+              return valUpper
             }
           }
         },
@@ -67,7 +72,12 @@ export default {
           id: 'name-input',
           label: 'Name',
           size: 50,
-          required: true
+          required: true,
+          onBlur: function(event) {
+            let val = event.target.value
+            this.$store.dispatch('setName', val)
+            return val
+          }
         }
       },
 
@@ -86,7 +96,9 @@ export default {
 
   computed: {
     ...mapState({
-      isEditing: state => state.nameAddressComponentData.isEditing
+      isEditing: state => state.nameAddressComponentData.isEditing,
+      internalTitle: state => state.nameAddressComponentData.internalTitle,
+      name: state => state.nameAddressComponentData.name
     })
   },
 

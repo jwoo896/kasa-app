@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <symbol id="open-door" viewBox="0 0 24 24">
+            <path stroke="#ffffff" stroke-width="2" fill="none" 
+                d="M8,0 v24 h16 v-24 h-16"
+            />
+            <path stroke="#ffffff" stroke-width="1" fill="#ffffff" 
+                d="M24,24 l-10,-4 l0,-16 l12,-4"
+            />
+        </symbol>
+
+        <symbol id="arrow-in" viewBox="0 0 24 24">
+            <path stroke="#ffffff" stroke-width="2" fill="none" 
+                d="M8,8 v-8 h16 v24 h-16 v-8"
+            />
+            <path stroke="#ffffff" stroke-width="1" fill="none" 
+                d="M0,12 h16"
+            />
+            <path stroke="#ffffff" stroke-width="2" fill="none" 
+                d="M16,12 l-3,-3 M16,12 l-3,3"
+            />
+        </symbol>
+
+        <symbol id="arrow-out" viewBox="0 0 24 24">
+            <path stroke="#ffffff" stroke-width="2" fill="none" 
+                d="M8,8 v-8 h16 v24 h-16 v-8"
+            />
+            <path stroke="#ffffff" stroke-width="1" fill="none" 
+                d="M16,12 h-16"
+            />
+            <path stroke="#ffffff" stroke-width="2" fill="none" 
+                d=" M0,12 l3,-3 M0,12 l3,3"
+            />
+        </symbol>
+
+        <symbol id="calendar" viewBox="0 0 24 24">
+            <path stroke="#ffffff" stroke-width="2" fill="none" 
+                d="M0,4 h24 v20 h-24 v-20 m0,7 h24"
+            />
+            <path stroke="#ffffff" stroke-width="2" fill="none" 
+                d="M6,0 v7 M19,0 v7"
+            />
+        </symbol>
+
+         <symbol id="user" viewBox="0 0 24 24">
+            <path stroke="#ffffff" stroke-width="3" d="M4,24 h17" />
+            <circle stroke="#ffffff" cx="12" cy="6" r="5" />
+            <circle stroke="#ffffff" cx="12" cy="25" r="10" />
+        </symbol>
+
+        <symbol id="exit" viewBox="0 0 24 24">
+            <path stroke="#ffffff" stroke-width="2" 
+                d="M 24,24 h-24 m4,0 v-24 h16 v24"
+            />
+            <circle stroke="#ffffff" fill="#ffffff" cx="15" cy="12" r=".5" />
+        </symbol>
+    </defs>
+</svg>
