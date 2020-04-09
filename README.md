@@ -9,8 +9,9 @@ The primary acceptance criteria were employed:
 
 the name section's internal title will strip any non letters and uppercase the remaining characters,
 
-- one caveat: the value is computed from the store and computeds won't trigger unless it see a changed value
-  so entering ach will give you ACH, and then entering ACh when leave ACh because ACH is stored
+- one caveat: the value is computed from the store and computeds won't trigger unless a value is changed.
+  So entering 'ach' will give you 'ACH', and then entering 'ACh' will leave 'ACh'. This is because the onBlur callback
+  uppercases remaining letters before dispatching to the the store and 'ACH' is already stored.
 
 ## Location section
 
