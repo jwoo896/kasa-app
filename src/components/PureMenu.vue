@@ -126,6 +126,10 @@ export default {
     }
   }
 
+  &:hover {
+    background-color: $active-gray;
+  }
+
   &.active {
     background-color: $active-gray;
     font-weight: 400;

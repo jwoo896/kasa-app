@@ -14,7 +14,7 @@
       :pattern="pattern"
       @blur="onBlur"
       :disabled="!isEditing"
-      v-model="inputVal"
+      :value="inputVal"
       :placeholder="placeholder"
     />
   </div>

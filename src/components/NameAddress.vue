@@ -53,18 +53,18 @@ export default {
           id: 'internal-title-input',
           label: 'Internal Title',
           maxLength: 3,
-          pattern: /[A-Za-z]/,
+          pattern: /[^A-Za-z]/g,
           required: true,
           styleObj: {
             alignSelf: 'unset'
           },
           onBlur: function(event) {
             let val = event.target.value
-            if (val.match(this.pattern)) {
-              let valUpper = val.toUpperCase()
-              this.$store.dispatch('setInternalTitle', valUpper)
-              return valUpper
-            }
+            let internalTitleStripped = val
+              .replace(this.pattern, '')
+              .toUpperCase()
+            this.$store.dispatch('setInternalTitle', internalTitleStripped)
+            return internalTitleStripped
           }
         },
 
