@@ -83,6 +83,7 @@ export default {
 
     applyChanges() {
       this.isSaving = true
+      // mock client-server transaction
       setTimeout(() => {
         this.$store.dispatch('toggleEdit')
         this.isSaving = false

@@ -191,13 +191,10 @@ export default {
 
       this.createResetControlButton()
     })
+  },
 
-    EventBus.$on('lat_updated', lat => {
-      this.markerPos = { type: 'lat', val: parseFloat(lat) }
-    })
-    EventBus.$on('lng_updated', lng => {
-      this.markerPos = { type: 'lng', val: parseFloat(lng) }
-    })
+  destroyed() {
+    EventBus.$off('googleMaps')
   }
 }
 </script>

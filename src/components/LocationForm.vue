@@ -125,6 +125,10 @@ export default {
         this.$store.dispatch('setMapMarkerLng', place.geometry.location.lng())
       })
     })
+  },
+
+  destroyed() {
+    EventBus.$off('googleMaps')
   }
 }
 </script>
