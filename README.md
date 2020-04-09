@@ -34,6 +34,9 @@ I employ the vue router just to simulate how I envisioned the application to beh
 The app has a header that lists the route path. This is not functional and purely representational. The nested menu on the left however, is functional
 nested router. (I made a few empty components to show that it works. Name & Address is the only component with content.)
 
+- caveat: the unit template section (in edit view) and the relations section have router-links but the components don't exist so if you navigate to any of them you'll get a blank router-view. If you view any of these components and return to a component that exists while in edit mode, the footer component will lose its width setting. switch modes to while viewing a component that exists, to re-render the footer with the correct
+  width.
+
 ## Vuex
 
 Input data values are stored in state so you can navigate to another component via the nested menu and return to Name & Address to see the data remains.
