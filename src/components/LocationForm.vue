@@ -1,5 +1,5 @@
 <template>
-  <div id="location-form-container">
+  <div id="location-form-container" data-testid="location-form">
     <div id="street-address-wrapper">
       <PureTextInput
         :dataIdProp="inputMetaData.streetAddressInput.autocomplete"
@@ -97,7 +97,6 @@ export default {
       isEditing: state => state.nameAddressComponentData.isEditing,
       place: state => {
         let place = state.nameAddressComponentData.gMapsData.autocompletePlace
-        console.log(place)
         return {
           name: place ? place.name : '',
           locality: place ? place.address_components[3].long_name : '',
@@ -144,9 +143,6 @@ export default {
   align-self: stretch;
   margin-right: 3em;
   padding: 0.5em 2em 1em 2em;
-}
-
-#street-address-wrapper {
 }
 
 #city-state-zip-wrapper {

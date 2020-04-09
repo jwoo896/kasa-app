@@ -31,7 +31,6 @@ export default {
   data() {
     return {
       headerData: this.data,
-      // isEditing: false,
       showButton: true
     }
   },
@@ -45,7 +44,8 @@ export default {
   computed: {
     ...mapState({
       isEditing: state => {
-        if (state.nameAddressComponentData.isEditing) {
+        let isEditing = state.nameAddressComponentData.isEditing
+        if (isEditing) {
           Velocity(
             document.getElementById('edit-button'),
             'transition.slideRightOut',
@@ -64,6 +64,7 @@ export default {
             }
           )
         }
+        return isEditing
       }
     })
   },

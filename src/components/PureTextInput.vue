@@ -3,6 +3,7 @@
     <div class="input-label">{{ label }}</div>
     <input
       :data-id="dataIdProp"
+      :data-testid="id"
       :id="id"
       :style="styleProp"
       type="text"
